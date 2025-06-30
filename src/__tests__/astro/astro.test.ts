@@ -4,6 +4,7 @@ import {
   getSignByLunarDate,
   getSignBySolarDate,
   getZodiacBySolarDate,
+  withOptions,
 } from '../../astro';
 import { setLanguage } from '../../i18n';
 import { astro } from '../../index';
@@ -11,7 +12,7 @@ import { astro } from '../../index';
 describe('Astrolabe', () => {
   afterEach(() => {
     setLanguage('zh-CN');
-    astro.config({ yearDivide: 'exact' });
+    astro.config({ yearDivide: 'exact', algorithm: 'default' });
   });
 
   test('bySolar()', () => {
@@ -238,6 +239,26 @@ describe('Astrolabe', () => {
     expect(agePalace2).toHaveProperty('name', '仆役');
     expect(agePalace2).toHaveProperty('heavenlyStem', '丁');
     expect(agePalace2).toHaveProperty('earthlyBranch', '亥');
+  });
+
+  test('horoscope()', () => {
+    const result = astro.bySolar('1991-3-7', 6, '女', true);
+
+    const horoscope = result.horoscope('2025-3-26');
+
+    expect(horoscope).toHaveProperty('solarDate', '2025-3-26');
+    expect(horoscope.decadal).toHaveProperty('index', 8);
+    expect(horoscope.decadal).toHaveProperty('heavenlyStem', '戊');
+    expect(horoscope.decadal).toHaveProperty('earthlyBranch', '戌');
+    expect(horoscope.yearly).toHaveProperty('index', 3);
+    expect(horoscope.yearly).toHaveProperty('heavenlyStem', '乙');
+    expect(horoscope.yearly).toHaveProperty('earthlyBranch', '巳');
+    expect(horoscope.monthly).toHaveProperty('index', 10);
+    expect(horoscope.monthly).toHaveProperty('heavenlyStem', '己');
+    expect(horoscope.monthly).toHaveProperty('earthlyBranch', '卯');
+    expect(horoscope.daily).toHaveProperty('index', 0);
+    expect(horoscope.daily).toHaveProperty('heavenlyStem', '甲');
+    expect(horoscope.daily).toHaveProperty('earthlyBranch', '午');
   });
 
   test('bySolar() Korean', () => {
@@ -688,6 +709,37 @@ describe('Astrolabe', () => {
     expect(result).toHaveProperty('fiveElementsClass', '火六局');
   });
 
+  test('withOptions() with dayDivide `current`', () => {
+    const result = astro.withOptions({
+      type: 'solar',
+      dateStr: '1987-9-23',
+      timeIndex: 12,
+      gender: 'female',
+      fixLeap: true,
+      language: 'zh-CN',
+      config: {
+        yearDivide: 'normal',
+        dayDivide: 'current',
+      },
+    });
+
+    expect(result).toHaveProperty('solarDate', '1987-9-23');
+    expect(result).toHaveProperty('lunarDate', '一九八七年八月初一');
+    expect(result).toHaveProperty('chineseDate', '丁卯 己酉 丙子 戊子');
+    expect(result).toHaveProperty('time', '晚子时');
+    expect(result).toHaveProperty('zodiac', '兔');
+    expect(result).toHaveProperty('earthlyBranchOfSoulPalace', '酉');
+    expect(result).toHaveProperty('earthlyBranchOfBodyPalace', '酉');
+    expect(result).toHaveProperty('soul', '文曲');
+    expect(result).toHaveProperty('body', '天同');
+    expect(result).toHaveProperty('fiveElementsClass', '土五局');
+
+    expect(result.palace('命宫')).toHaveProperty('index', 7);
+    expect(result.palace('命宫')?.isEmpty()).toBeTruthy();
+    expect(result.palace('命宫')?.has(['火星', '天钺'])).toBeTruthy();
+    expect(result.palace('迁移')?.has(['太阳', '天梁', '右弼', '八座', '天贵', '空亡', '天哭'])).toBeTruthy();
+  });
+
   test('withOptions() 2', () => {
     const result = astro.withOptions({
       type: 'lunar',
@@ -911,5 +963,76 @@ describe('Astrolabe', () => {
 
     expect(horo1.age.index).toEqual(10);
     expect(horo1.age.nominalAge).toEqual(23);
+  });
+
+  test('withOptions() with earth type', () => {
+    astro.config({ algorithm: 'zhongzhou' });
+
+    const result = withOptions({
+      dateStr: '1979-08-21',
+      type: 'solar',
+      timeIndex: 7,
+      gender: 'male',
+      astroType: 'earth',
+    });
+
+    const soulPalace = result.palace('命宫');
+
+    expect(result.earthlyBranchOfSoulPalace).toBe('卯');
+    expect(soulPalace).toHaveProperty('index', 1);
+    expect(soulPalace).toHaveProperty('heavenlyStem', '丁');
+    expect(soulPalace).toHaveProperty('earthlyBranch', '卯');
+    expect(soulPalace?.majorStars[0]).toHaveProperty('name', '天相');
+    expect(soulPalace?.minorStars[0]).toHaveProperty('name', '文昌');
+    expect(result).toHaveProperty('fiveElementsClass', '火六局');
+    expect(soulPalace?.decadal).toStrictEqual({ range: [6, 15], heavenlyStem: '丁', earthlyBranch: '卯' });
+  });
+
+  test('withOptions() with human type', () => {
+    astro.config({ algorithm: 'zhongzhou' });
+
+    const result = withOptions({
+      dateStr: '1979-08-21',
+      type: 'solar',
+      timeIndex: 8,
+      gender: 'male',
+      astroType: 'human',
+    });
+
+    const soulPalace = result.palace('命宫');
+
+    expect(result.earthlyBranchOfSoulPalace).toBe('寅');
+    expect(soulPalace).toHaveProperty('index', 0);
+    expect(soulPalace).toHaveProperty('heavenlyStem', '丙');
+    expect(soulPalace).toHaveProperty('earthlyBranch', '寅');
+    expect(soulPalace?.majorStars[0]).toHaveProperty('name', '太阳');
+    expect(soulPalace?.minorStars[0]).toHaveProperty('name', '文昌');
+    expect(result).toHaveProperty('fiveElementsClass', '火六局');
+    expect(soulPalace?.decadal).toStrictEqual({ range: [6, 15], heavenlyStem: '丙', earthlyBranch: '寅' });
+  });
+
+  test('withOptions() to fix GitHub#242&#244', () => {
+    astro.config({ yearDivide: 'normal' });
+
+    const astrolable = withOptions({
+      dateStr: '1979.08.21',
+      type: 'solar',
+      timeIndex: 6,
+      gender: 'male',
+    });
+    const horoscope = astrolable.horoscope('2025-06-10 12:00');
+
+    expect(horoscope.monthly).toHaveProperty('index', 7);
+    expect(horoscope.daily).toHaveProperty('index', 9);
+
+    const horoscope2 = astrolable.horoscope('2020-6-6');
+
+    expect(horoscope2.monthly).toHaveProperty('index', 1);
+    expect(horoscope2.daily).toHaveProperty('index', 3);
+
+    const horoscope3 = astrolable.horoscope('2020-6-7');
+
+    expect(horoscope3.monthly).toHaveProperty('index', 2);
+    expect(horoscope3.daily).toHaveProperty('index', 5);
   });
 });

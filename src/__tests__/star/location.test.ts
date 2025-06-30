@@ -1,3 +1,4 @@
+import { astro } from '../..';
 import { EarthlyBranchName, HeavenlyStemName } from '../../i18n';
 import {
   getLuYangTuoMaIndex,
@@ -15,9 +16,60 @@ import {
   getChangQuIndexByHeavenlyStem,
   getHuagaiXianchiIndex,
   getGuGuaIndex,
+  getDahaoIndex,
 } from '../../star';
 
 describe('star/location', () => {
+  test('getDahaoIndex()', () => {
+    const index = getDahaoIndex('siEarthly');
+
+    expect(index).toBe(8);
+  });
+
+  test('santai bazuo for lunar month', () => {
+    const result = astro.withOptions({
+      type: 'solar',
+      dateStr: '1979-08-21',
+      timeIndex: 6,
+      gender: 'male',
+      language: 'zh-CN',
+    });
+
+    const santaiIndex = result.star('三台').palace()!.index;
+    const bazuoIndex = result.star('八座').palace()!.index;
+
+    expect(santaiIndex).toBe(0);
+    expect(bazuoIndex).toBe(10);
+  });
+
+  test('xunkong for yin year', () => {
+    const result = astro.withOptions({
+      type: 'solar',
+      dateStr: '1979-08-21',
+      timeIndex: 6,
+      gender: 'male',
+      language: 'zh-CN',
+    });
+
+    const xunkongIndex = result.star('旬空').palace()!.index;
+
+    expect(xunkongIndex).toBe(11);
+  });
+
+  test('xunkong for yang year', () => {
+    const result = astro.withOptions({
+      type: 'solar',
+      dateStr: '1980-08-21',
+      timeIndex: 6,
+      gender: 'male',
+      language: 'zh-CN',
+    });
+
+    const xunkongIndex = result.star('旬空').palace()!.index;
+
+    expect(xunkongIndex).toBe(10);
+  });
+
   test('getLuYangTuoMaIndex()', () => {
     const data = [
       {
@@ -673,7 +725,14 @@ describe('star/location', () => {
   });
 
   test('getYearlyStarIndex()', () => {
-    expect(getYearlyStarIndex('2023-03-06', 2, true)).toStrictEqual({
+    expect(
+      getYearlyStarIndex({
+        solarDate: '2023-03-06',
+        timeIndex: 2,
+        fixLeap: true,
+        gender: '女',
+      }),
+    ).toStrictEqual({
       xianchiIndex: 10,
       huagaiIndex: 5,
       guchenIndex: 3,
@@ -691,14 +750,25 @@ describe('star/location', () => {
       tianfuIndex: 3,
       jieluIndex: 10,
       kongwangIndex: 11,
-      xunkongIndex: 2,
+      xunkongIndex: 3,
       tiankongIndex: 2,
       tiandeIndex: 10,
       yuedeIndex: 6,
       tianshangIndex: 4,
       tianshiIndex: 6,
+      dahaoAdjIndex: 6,
+      jiekongIndex: 11,
+      jieshaAdjIndex: 6,
+      nianjieIndex: 5,
     });
-    expect(getYearlyStarIndex('2001-08-16', 2, true)).toStrictEqual({
+    expect(
+      getYearlyStarIndex({
+        solarDate: '2001-08-16',
+        timeIndex: 2,
+        fixLeap: true,
+        gender: '女',
+      }),
+    ).toStrictEqual({
       xianchiIndex: 4,
       huagaiIndex: 11,
       guchenIndex: 6,
@@ -716,12 +786,16 @@ describe('star/location', () => {
       tianfuIndex: 3,
       jieluIndex: 2,
       kongwangIndex: 3,
-      xunkongIndex: 6,
+      xunkongIndex: 7,
       tiankongIndex: 4,
       tiandeIndex: 0,
       yuedeIndex: 8,
       tianshangIndex: 8,
       tianshiIndex: 10,
+      dahaoAdjIndex: 8,
+      jiekongIndex: 3,
+      jieshaAdjIndex: 0,
+      nianjieIndex: 3,
     });
   });
 

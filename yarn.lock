@@ -1050,17 +1050,10 @@
   resolved "https://registry.npmjs.org/@babel/regjsgen/-/regjsgen-0.8.0.tgz#f0ba69b075e1f05fb2825b7fad991e7adbb18310"
   integrity sha512-x/rqGMdzj+fWZvCOYForTghzbtqPDZ5gPwaoNGHdgDfF2QA/XZbCBp4Moo5scrkAMPhB7z26XM/AaHuIJdgauA==
 
-"@babel/runtime@^7.22.5":
-  version "7.22.10"
-  resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.22.10.tgz"
-  integrity sha512-21t/fkKLMZI4pqP2wlmsQAWnYW1PDyKyyUV4vCi+B25ydmdaYTKXPwCj0BzSUnZf4seIiYvSA3jcZ3gdsMFkLQ==
-  dependencies:
-    regenerator-runtime "^0.14.0"
-
-"@babel/runtime@^7.8.4":
-  version "7.23.2"
-  resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.23.2.tgz#062b0ac103261d68a966c4c7baf2ae3e62ec3885"
-  integrity sha512-mM8eg4yl5D6i3lu2QKPuPH4FArvJ8KhTofbE7jwMUv9KX5mBvwPAqnV3MlyBNqdp9RyRKP6Yck8TrfYrPvX3bg==
+"@babel/runtime@^7.22.5", "@babel/runtime@^7.8.4":
+  version "7.26.10"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.26.10.tgz#a07b4d8fa27af131a633d7b3524db803eb4764c2"
+  integrity sha512-2WJMeRQPHKSPemqk/awGrAiuFfzBmOIPXKizAsVhWH9YJqLZ0H+HS4c8loHGgW6utJ3E/ejXQUsiGaQy2NZ9Fw==
   dependencies:
     regenerator-runtime "^0.14.0"
 
@@ -3852,10 +3845,10 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
-lunar-lite@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.npmjs.org/lunar-lite/-/lunar-lite-0.2.3.tgz#415274503dae18880ea0ad7db2c517468c89681a"
-  integrity sha512-sI8BMt3Q9RFvRJSKOdrutxRVc+REVmo709aeUKlAJFOg04+/PS9z/wORDVLJzo+fgBE7cdiIKGbNk1yU6emepg==
+lunar-lite@^0.2.7:
+  version "0.2.7"
+  resolved "https://registry.npmjs.org/lunar-lite/-/lunar-lite-0.2.7.tgz#3b68df72870627158acfa31d26d0f5fe9b441bbd"
+  integrity sha512-ePsbfKBUhnHINckdb5svyjSiYItxR6BySSmZ5Wjc5yRwKX8nbIVRBB0hwrW/NpZP5SuSXz1TSvuM/TVP9brZmw==
   dependencies:
     lunar-typescript "^1.7.5"
 
@@ -3863,6 +3856,11 @@ lunar-typescript@^1.7.5:
   version "1.7.5"
   resolved "https://registry.npmjs.org/lunar-typescript/-/lunar-typescript-1.7.5.tgz#8a407f9db10aaf896f1477564dbfef741463e245"
   integrity sha512-AlOwYrxHRCR9Plba5TlZY0NVv6aFobmR1gxfiAE1KxjDzBXoDtT2KrsBYCVaErGokiL8qLMS1FNwGPiPRX2a4g==
+
+lunar-typescript@^1.7.8:
+  version "1.7.8"
+  resolved "https://registry.npmjs.org/lunar-typescript/-/lunar-typescript-1.7.8.tgz#f051ea5a3a5f731581ed37fe4638df8b42ce3b52"
+  integrity sha512-i1rjc1eDHUF4k8NfpYxar3ZKtxyVHOGnR+yVTMS8jMy74ugq7KeHI+8T1XIvB3uojpBq6asywe7z25PmI3VLPw==
 
 make-dir@^4.0.0:
   version "4.0.0"
